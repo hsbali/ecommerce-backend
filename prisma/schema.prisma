@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Operator {
+  id        Int       @id @default(autoincrement())
+  fName     String
+  lName     String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  stores OperatorsOnStores[]
+
+  @@map("operators")
+}
+
+model Store {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  operators OperatorsOnStores[]
+
+  @@map("stores")
+}
+
+model OperatorsOnStores {
+  store      Store    @relation(fields: [storeId], references: [id])
+  storeId    Int // relation scalar field (used in the `@relation` attribute above)
+  operator   Operator @relation(fields: [operatorId], references: [id])
+  operatorId Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([storeId, operatorId])
+}
+
+model RefreshToken {
+  id        Int     @id @default(autoincrement())
+  sub       Int
+  username  String
+  ip        String
+  userAgent String
+  valid     Boolean @default(true)
+
+  @@map("refreshTokens")
+}
