@@ -23,7 +23,7 @@ This project uses
   - `ACCESS_TOKEN_SECRET` used for JWT Access tokens.
 - Migrate the Prisma schema to your local Postgres database with `npx prisma migrate dev`
 
-## Running the app
+### Running the app
 
 ```bash
 # development
